@@ -45,11 +45,28 @@ def addVar(problem, grid, domains, init):
     #       Example syntax for adding a constraint that two variable are not equal:
     #       problem.addConstraint(lambda a, b: a !=b, (variable1,variable2)
     #       See the example file for more"""
-def cstAdd(problem, grid, domains,psize):
+def cstAdd(problem, grid, domains, psize):
     # --------------------
     # Your code
+    dim = psize ** 2
+    for row in grid:
+        for first in range(dim):
+            for second in range(first + 1, dim):
+                problem.addConstraint(lambda a, b: a != b, (row[first], row[second]))
+    for col in range(dim):
+        for first in range(dim):
+            for second in range(first + 1, dim):
+                problem.addConstraint(lambda a, b: a != b, (grid[first][col], grid[second][col]))
 
-    pass
+    for box_row in range(0, dim, psize):
+        for box_col in range(0, dim, psize):
+            cells = grid[
+                box_row:box_row + psize,
+                box_col:box_col + psize
+            ].flatten().tolist()
+            for first in range(dim):
+                for second in range(first + 1, dim):
+                    problem.addConstraint(lambda a, b: a != b, (cells[first], cells[second]))
     # --------------------
 
 """ Implementation for a CSP Sudoku Solver """
