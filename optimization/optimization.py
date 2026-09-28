@@ -98,14 +98,27 @@ def sudokuCSP(positions,psize):
 def fractionalKnapsack(c):
     # -------------------
     # Your code
-    # First define some variables
-    
+    # First define some variables\
+
+    #   weight, val
+    item1 = (5, 2)
+    item2 = (3, 3)
+    item3 = (1, 1)
+    items = [item1, item2, item3]
+
+    weights = np.array([item[0] for item in items])
+    values = np.array([item[1] for item in items])
+
+    fractions = cp.Variable(len(items))
 
     # Put your constraints here
-    constraints = []
+    constraints = [weights @ fractions <= c,
+                   fractions <= 1,
+                   fractions >= 0,
+                   ]
 
     # Fix this to be the correct objective function
-    obj = cp.Maximize(0)
+    obj = cp.Maximize(values @ fractions)
 
     # End of your code
     # ------------------
