@@ -162,8 +162,29 @@ def sudokuIP(positions,psize):
     # It should define the constraints needed
     # We've given you one to get you started
     constraints.extend([0 <= M[x][k] for x in range(dim**2) for k in range (dim)])
+    constraints.extend([M[x][k] <= 1 for x in range(dim**2) for k in range (dim)])
 
+    for row in range(dim):
+        for col in range(dim):
+            constraints.append(cp.sum(M[row * dim + col, :]) == 1)
 
+    for k in range(dim):
+        for row in range(dim):
+            constraints.append(sum(M[row * dim + col, k] for col in range(dim)) == 1)
+
+        for col in range(dim):
+            constraints.append(sum(M[row * dim + col, k] for row in range(dim)) == 1)
+
+        for box_row in range(0, dim, psize):
+            for box_col in range(0, dim, psize):
+                constraints.append(
+                sum(M[row * dim + col, k]
+                    for row in range(box_row, box_row + psize)
+                    for col in range(box_col, box_col + psize)) == 1
+                )
+
+    for row, col, value in positions:
+        constraints.append(M[row * dim + col, value - 1] == 1)
 
     # End your code
     # -------------------
@@ -226,7 +247,7 @@ class TravellingSalesmanProblem(Annealer):
         """Calculates distance between two latitude-longitude coordinates."""
         # -----------------------------
         # Your code
-        return 0.0
+        return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1] ** 2))
         # -----------------------------
 
 
@@ -242,7 +263,7 @@ class TravellingSalesmanProblem(Annealer):
 
         # --------------------
         # Your code
-
+        
         pass
         # -------------------------
 
