@@ -247,7 +247,7 @@ class TravellingSalesmanProblem(Annealer):
         """Calculates distance between two latitude-longitude coordinates."""
         # -----------------------------
         # Your code
-        return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1] ** 2))
+        return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)
         # -----------------------------
 
 
@@ -263,7 +263,12 @@ class TravellingSalesmanProblem(Annealer):
 
         # --------------------
         # Your code
-        
+        if len(self.state) < 2:
+            return
+
+        first, second = random.sample(range(len(self.state)), 2)
+        self.state[first], self.state[second] = self.state[second], self.state[first]
+
         pass
         # -------------------------
 
@@ -278,7 +283,13 @@ class TravellingSalesmanProblem(Annealer):
         
         #-----------------------
         # Your code
-
+        return sum(
+            self.distance(
+                self.cities[self.state[index]],
+                self.cities[self.state[(index + 1) % len(self.state)]]
+            )
+            for index in range(len(self.state))
+            )
 
 
         #-----------------------
